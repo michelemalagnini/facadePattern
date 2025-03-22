@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'facadePattern';
+  title = 'facadePattern with ZOD';
   users: User[] = [];
 
   constructor(private userService: UserService) {}

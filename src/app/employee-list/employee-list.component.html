@@ -1,0 +1,10 @@
+<h1>Employee list</h1>
+<ul>
+  @for (user of users; track user.id; let i = $index; let even = $even) {
+  <li>
+    <button (click)="goToEmployeeDetails(user.id)">
+      G{{ i }} - {{ user.fullName }}
+    </button>
+  </li>
+  }
+</ul>

@@ -11,13 +11,14 @@ import { UserMapper } from './user.mapper';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = 'https://jsonplaceholder.typicode.com/users'; // Sostituisci con l'URL della tua API
+  private apiUrlUsers = 'https://jsonplaceholder.typicode.com/users';
+  private apiUrluserDetails = 'https://jsonplaceholder.typicode.com/users/';
 
   constructor(private http: HttpClient) {}
 
   // GET: ottiene la lista degli utenti e li mappa al formato front-end
   getUsers(): Observable<User[]> {
-    return this.http.get<UserDto[]>(this.apiUrl).pipe(
+    return this.http.get<UserDto[]>(this.apiUrlUsers).pipe(
       tap((rawData) => console.log('Raw data from backend:', rawData)),
       map((dtos: UserDto[]) => dtos.map((dto) => UserMapper.toUser(dto))),
       tap((mappedData) => console.log('Mapped data:', mappedData))
@@ -28,7 +29,18 @@ export class UserService {
   createUser(user: User): Observable<User> {
     const dto: UserDto = UserMapper.toUserDto(user);
     return this.http
-      .post<UserDto>(this.apiUrl, dto)
+      .post<UserDto>(this.apiUrlUsers, dto)
       .pipe(map((createdDto: UserDto) => UserMapper.toUser(createdDto)));
+  }
+
+  // GET: ottiene i dettagli di un singolo utente e li mappa al formato front-end
+  getUserById(userId: number): Observable<User> {
+    return this.http.get<UserDto>(`${this.apiUrluserDetails}${userId}`).pipe(
+      tap((rawData) => console.log(`Raw data for user ${userId}:`, rawData)),
+      map((dto: UserDto) => UserMapper.toUser(dto)),
+      tap((mappedData) =>
+        console.log(`Mapped data for user ${userId}:`, mappedData)
+      )
+    );
   }
 }

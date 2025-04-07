@@ -36,6 +36,6 @@ export class EmployeeListComponent extends Unsub {
   }
 
   goToEmployeeDetails(id: number) {
-    this.router.navigate(['/employee-details', id]);
+    this.router.navigate(['employee', id]);
   }
 }

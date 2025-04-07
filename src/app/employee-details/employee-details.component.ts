@@ -1,36 +1,31 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../user.service';
 import { Unsub } from '../unsub.class';
 import { User } from '../../models/user.model';
-import { takeUntil } from 'rxjs';
+import { of, switchMap } from 'rxjs';
+import { AsyncPipe, CommonModule, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-employee-details',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, AsyncPipe, NgIf],
   templateUrl: './employee-details.component.html',
   styleUrl: './employee-details.component.css',
 })
 export class EmployeeDetailsComponent extends Unsub {
   userService = inject(UserService);
   route = inject(ActivatedRoute);
-  user: User | undefined;
+  router = inject(Router);
 
-  ngOnInit(): void {
-    if (this.id) {
-      this.userService
-        .getUserById(Number(this.id))
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe({
-          next: (response) => {
-            this.user = response;
-          },
-          error: (error) => {
-            console.error(error);
-          },
-        });
-    }
+  user$ = this.route.paramMap.pipe(
+    switchMap((params) => {
+      const id = Number(params.get('id'));
+      return id ? this.userService.getUserById(id) : of(null);
+    })
+  );
+
+  goBack() {
+    this.router.navigate(['/employee']);
   }
-  id = this.route.snapshot.paramMap.get('id');
 }

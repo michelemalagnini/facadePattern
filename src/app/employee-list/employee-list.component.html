@@ -3,7 +3,7 @@
   @for (user of users; track user.id; let i = $index; let even = $even) {
   <li>
     <button (click)="goToEmployeeDetails(user.id)">
-      G{{ i }} - {{ user.fullName }}
+      G{{ i + 1 }} - {{ user.fullName }}
     </button>
   </li>
   }

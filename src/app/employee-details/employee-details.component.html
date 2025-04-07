@@ -1,1 +1,16 @@
-<h2>Details for Employee ID: {{ id }}</h2>
+<ng-container *ngIf="user$ | async as user; else loading">
+  <h3>{{ user.fullName }}</h3>
+  <p><strong>Email:</strong> {{ user.email }}</p>
+  <p><strong>Telefono:</strong> {{ user.phone }}</p>
+  <p><strong>Città:</strong> {{ user.city }}</p>
+  <p>
+    <strong>Sito web:</strong>
+    <a href="http://{{ user.website }}" target="_blank">{{ user.website }}</a>
+  </p>
+  <p><strong>Azienda:</strong> {{ user.companyName }}</p>
+  <button (click)="goBack()">🔙 Torna alla lista</button>
+</ng-container>
+
+<ng-template #loading>
+  <p>Caricamento utente...</p>
+</ng-template>
